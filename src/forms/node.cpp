@@ -64,13 +64,21 @@ namespace sackofcheese {
             yvel -= vec.y() / weight;
         }
 
-        if (qAbs(xvel) < 0.1 && qAbs(yvel) < 0.1)
+        if (qAbs(xvel) < vTol && qAbs(yvel) < vTol)
             xvel = yvel = 0;
 
         QRectF sceneRect = scene()->sceneRect();
         newPos = pos() + QPointF(xvel, yvel);
         newPos.setX(qMin(qMax(newPos.x(), sceneRect.left() + 10), sceneRect.right() - 10));
         newPos.setY(qMin(qMax(newPos.y(), sceneRect.top() + 10), sceneRect.bottom() - 10));
+    }
+
+    void Node::equilibrate() {
+        vTol = 0.1;
+    }
+
+    void Node::lockPosition() {
+        vTol = 1e10;
     }
 
     bool Node::advancePosition() {

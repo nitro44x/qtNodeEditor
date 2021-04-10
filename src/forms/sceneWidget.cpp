@@ -13,18 +13,16 @@ namespace sackofcheese {
     SceneWidget::SceneWidget(QWidget* parent) : QGraphicsView(parent) {
         QGraphicsScene* scene = new QGraphicsScene(this);
         scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-        scene->setSceneRect(-200, -200, 400, 400);
+        //scene->setSceneRect(-200, -200, 400, 400);
         setScene(scene);
         setCacheMode(CacheBackground);
         setViewportUpdateMode(BoundingRectViewportUpdate);
         setRenderHint(QPainter::Antialiasing);
         setTransformationAnchor(AnchorUnderMouse);
-        scale(qreal(0.8), qreal(0.8));
-        setMinimumSize(400, 400);
-        setWindowTitle(tr("Elastic Nodes"));
-        //! [0]
+        //scale(qreal(0.8), qreal(0.8));
+        //setMinimumSize(400, 400);
+        //setWindowTitle(tr("Elastic Nodes"));
 
-        //! [1]
         Node* node1 = new Node(this);
         Node* node2 = new Node(this);
         Node* node3 = new Node(this);
@@ -73,23 +71,9 @@ namespace sackofcheese {
         if (!timerId)
             timerId = startTimer(1000 / 25);
     }
-    //! [2]
 
-    //! [3]
     void SceneWidget::keyPressEvent(QKeyEvent* event) {
         switch (event->key()) {
-        case Qt::Key_Up:
-            centerNode->moveBy(0, -20);
-            break;
-        case Qt::Key_Down:
-            centerNode->moveBy(0, 20);
-            break;
-        case Qt::Key_Left:
-            centerNode->moveBy(-20, 0);
-            break;
-        case Qt::Key_Right:
-            centerNode->moveBy(20, 0);
-            break;
         case Qt::Key_Plus:
             zoomIn();
             break;
@@ -97,6 +81,19 @@ namespace sackofcheese {
             zoomOut();
             break;
         case Qt::Key_Space:
+        {
+            QVector<Node*> nodes;
+            const QList<QGraphicsItem*> items = scene()->items();
+            for (QGraphicsItem* item : items) {
+                if (Node* node = qgraphicsitem_cast<Node*>(item))
+                    nodes << node;
+            }
+
+            for (Node* node : qAsConst(nodes))
+                node->equilibrate();
+            itemMoved();
+            break;
+        }
         case Qt::Key_Enter:
             shuffle();
             break;
@@ -104,9 +101,7 @@ namespace sackofcheese {
             QGraphicsView::keyPressEvent(event);
         }
     }
-    //! [3]
 
-    //! [4]
     void SceneWidget::timerEvent(QTimerEvent* event) {
         Q_UNUSED(event);
 
@@ -129,30 +124,23 @@ namespace sackofcheese {
         if (!itemsMoved) {
             killTimer(timerId);
             timerId = 0;
+            setSceneRect(scene()->itemsBoundingRect());
+            for (Node* node : qAsConst(nodes))
+                node->lockPosition();
         }
     }
-    //! [4]
 
 #if QT_CONFIG(wheelevent)
-//! [5]
     void SceneWidget::wheelEvent(QWheelEvent* event) {
         scaleView(pow(2., -event->angleDelta().y() / 240.0));
     }
-    //! [5]
 #endif
 
-//! [6]
     void SceneWidget::drawBackground(QPainter* painter, const QRectF& rect) {
         Q_UNUSED(rect);
 
         // Shadow
         QRectF sceneRect = this->sceneRect();
-        QRectF rightShadow(sceneRect.right(), sceneRect.top() + 5, 5, sceneRect.height());
-        QRectF bottomShadow(sceneRect.left() + 5, sceneRect.bottom(), sceneRect.width(), 5);
-        if (rightShadow.intersects(rect) || rightShadow.contains(rect))
-            painter->fillRect(rightShadow, Qt::darkGray);
-        if (bottomShadow.intersects(rect) || bottomShadow.contains(rect))
-            painter->fillRect(bottomShadow, Qt::darkGray);
 
         // Fill
         QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
@@ -161,25 +149,8 @@ namespace sackofcheese {
         painter->fillRect(rect.intersected(sceneRect), gradient);
         painter->setBrush(Qt::NoBrush);
         painter->drawRect(sceneRect);
-
-        // Text
-        QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4,
-            sceneRect.width() - 4, sceneRect.height() - 4);
-        QString message(tr("Click and drag the nodes around, and zoom with the mouse "
-            "wheel or the '+' and '-' keys"));
-
-        QFont font = painter->font();
-        font.setBold(true);
-        font.setPointSize(14);
-        painter->setFont(font);
-        painter->setPen(Qt::lightGray);
-        painter->drawText(textRect.translated(2, 2), message);
-        painter->setPen(Qt::black);
-        painter->drawText(textRect, message);
     }
-    //! [6]
 
-    //! [7]
     void SceneWidget::scaleView(qreal scaleFactor) {
         qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
         if (factor < 0.07 || factor > 100)
@@ -187,7 +158,6 @@ namespace sackofcheese {
 
         scale(scaleFactor, scaleFactor);
     }
-    //! [7]
 
     void SceneWidget::shuffle() {
         const QList<QGraphicsItem*> items = scene()->items();

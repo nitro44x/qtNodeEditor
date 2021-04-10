@@ -9,6 +9,7 @@ namespace sackofcheese {
     class SceneWidget;
 
     class Node : public QGraphicsItem {
+
     public:
         Node(SceneWidget* graphWidget);
 
@@ -25,6 +26,9 @@ namespace sackofcheese {
         QPainterPath shape() const override;
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
+        void equilibrate();
+        void lockPosition();
+
     protected:
         QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
@@ -35,5 +39,6 @@ namespace sackofcheese {
         QVector<Edge*> edgeList;
         QPointF newPos;
         SceneWidget* graph;
+        double vTol = 100;
     };
 }
