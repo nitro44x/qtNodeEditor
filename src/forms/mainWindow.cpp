@@ -1,4 +1,4 @@
-#include "mainWindow.hpp"
+#include <forms/mainWindow.hpp>
 
 #include "ui_mainWindow.h"
 
