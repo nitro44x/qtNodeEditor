@@ -5,17 +5,17 @@
 #include <forms/node.hpp>
 #include <forms/edge.hpp>
 
-namespace sackofcheese {
-    void initData(SceneWidget* scene) {
-        Node* node1 = new Node(scene);
-        Node* node2 = new Node(scene);
-        Node* node3 = new Node(scene);
-        Node* node4 = new Node(scene);
-        Node* node5 = new Node(scene);
-        Node* node6 = new Node(scene);
-        Node* node7 = new Node(scene);
-        Node* node8 = new Node(scene);
-        Node* node9 = new Node(scene);
+struct SampleSetup {
+    static void init1(sackofcheese::SceneWidget* scene) {
+        sackofcheese::Node* node1 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node2 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node3 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node4 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node5 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node6 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node7 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node8 = new sackofcheese::Node(scene);
+        sackofcheese::Node* node9 = new sackofcheese::Node(scene);
         scene->addItem(node1);
         scene->addItem(node2);
         scene->addItem(node3);
@@ -25,18 +25,18 @@ namespace sackofcheese {
         scene->addItem(node7);
         scene->addItem(node8);
         scene->addItem(node9);
-        scene->addItem(new Edge(node1, node2));
-        scene->addItem(new Edge(node2, node3));
-        scene->addItem(new Edge(node2, node5));
-        scene->addItem(new Edge(node3, node6));
-        scene->addItem(new Edge(node4, node1));
-        scene->addItem(new Edge(node4, node5));
-        scene->addItem(new Edge(node5, node6));
-        scene->addItem(new Edge(node5, node8));
-        scene->addItem(new Edge(node6, node9));
-        scene->addItem(new Edge(node7, node4));
-        scene->addItem(new Edge(node8, node7));
-        scene->addItem(new Edge(node9, node8));
+        scene->addItem(new sackofcheese::Edge(node1, node2));
+        scene->addItem(new sackofcheese::Edge(node2, node3));
+        scene->addItem(new sackofcheese::Edge(node2, node5));
+        scene->addItem(new sackofcheese::Edge(node3, node6));
+        scene->addItem(new sackofcheese::Edge(node4, node1));
+        scene->addItem(new sackofcheese::Edge(node4, node5));
+        scene->addItem(new sackofcheese::Edge(node5, node6));
+        scene->addItem(new sackofcheese::Edge(node5, node8));
+        scene->addItem(new sackofcheese::Edge(node6, node9));
+        scene->addItem(new sackofcheese::Edge(node7, node4));
+        scene->addItem(new sackofcheese::Edge(node8, node7));
+        scene->addItem(new sackofcheese::Edge(node9, node8));
 
         node1->setPos(-50, -50);
         node2->setPos(0, -50);
@@ -50,14 +50,14 @@ namespace sackofcheese {
 
         scene->setCenterItem(node5);
     }
-}
+};
 
 int main(int argc, char** argv) {
 
     QApplication app(argc, argv);
 
     auto scene = new sackofcheese::SceneWidget();
-    sackofcheese::initData(scene);
+    SampleSetup::init1(scene);
     sackofcheese::MainWindow win;
     win.setCentralWidget(scene);
     win.show();
