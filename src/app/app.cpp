@@ -6,7 +6,7 @@
 #include <forms/edge.hpp>
 
 struct SampleSetup {
-    static void init1(sackofcheese::SceneWidget* scene) {
+    static void tutorialInit(sackofcheese::SceneWidget* scene) {
         sackofcheese::Node* node1 = new sackofcheese::Node(scene);
         sackofcheese::Node* node2 = new sackofcheese::Node(scene);
         sackofcheese::Node* node3 = new sackofcheese::Node(scene);
@@ -50,6 +50,16 @@ struct SampleSetup {
 
         scene->setCenterItem(node5);
     }
+
+    static void singleNode(sackofcheese::SceneWidget* scene) {
+        sackofcheese::Node* n = new sackofcheese::Node(scene);
+        scene->addItem(n);
+        n->setPos(0, 0);
+        scene->setCenterItem(n);
+    }
+
+    static void empty(sackofcheese::SceneWidget* ) {
+    }
 };
 
 int main(int argc, char** argv) {
@@ -57,7 +67,9 @@ int main(int argc, char** argv) {
     QApplication app(argc, argv);
 
     auto scene = new sackofcheese::SceneWidget();
-    SampleSetup::init1(scene);
+    //SampleSetup::tutorialInit(scene);
+    //SampleSetup::singleNode(scene);
+    SampleSetup::empty(scene);
     sackofcheese::MainWindow win;
     win.setCentralWidget(scene);
     win.show();
