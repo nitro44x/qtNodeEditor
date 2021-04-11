@@ -1,5 +1,7 @@
 #pragma once
 
+#include <forms/exports.hpp>
+
 #include <QGraphicsItem>
 #include <QVector>
 
@@ -8,7 +10,7 @@ namespace sackofcheese {
     class Edge;
     class SceneWidget;
 
-    class Node : public QGraphicsItem {
+    class QTNODEEDITORFORMS_EXPORT Node : public QGraphicsItem {
 
     public:
         Node(SceneWidget* graphWidget);

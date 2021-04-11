@@ -17,6 +17,9 @@ namespace sackofcheese {
 
         void itemMoved();
 
+        void addItem(QGraphicsItem* n);
+        void setCenterItem(Node* n);
+
     public slots:
         void shuffle();
         void zoomIn();
@@ -30,9 +33,14 @@ namespace sackofcheese {
 
         void scaleView(qreal scaleFactor);
 
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent* event) override;
+
     private:
         int timerId = 0;
         Node* centerNode;
+
+        void addItem(QPointF pt);
     };
 
 }

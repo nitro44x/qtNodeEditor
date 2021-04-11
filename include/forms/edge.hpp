@@ -1,11 +1,13 @@
 #pragma once
 
+#include <forms/exports.hpp>
+
 #include <QGraphicsItem>
 
 namespace sackofcheese {
     class Node;
 
-    class Edge : public QGraphicsItem {
+    class QTNODEEDITORFORMS_EXPORT Edge : public QGraphicsItem {
     public:
         Edge(Node* sourceNode, Node* destNode);
 

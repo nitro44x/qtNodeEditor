@@ -1,6 +1,6 @@
-#include "edge.hpp"
+#include <forms/edge.hpp>
 
-#include "node.hpp"
+#include <forms/node.hpp>
 
 #include <QPainter>
 #include <QtMath>

@@ -4,16 +4,16 @@ set(srcs
     mainWindow.cpp
     mainWindow.ui
     sceneWidget.cpp
-    node.hpp
-    node.cpp
-    edge.hpp
     edge.cpp
+    node.cpp
 )
 
 set(includes
+    ${PUBLIC_INCLUDE_DIR}/forms/exports.hpp
     ${PUBLIC_INCLUDE_DIR}/forms/mainWindow.hpp
     ${PUBLIC_INCLUDE_DIR}/forms/sceneWidget.hpp
-    ${PUBLIC_INCLUDE_DIR}/forms/exports.hpp
+    ${PUBLIC_INCLUDE_DIR}/forms/edge.hpp
+    ${PUBLIC_INCLUDE_DIR}/forms/node.hpp
 )
 
 add_library(qtNodeEditorForms SHARED ${srcs} ${includes})

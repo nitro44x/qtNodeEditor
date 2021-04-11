@@ -1,6 +1,6 @@
-#include "node.hpp"
+#include <forms/node.hpp>
 
-#include "edge.hpp"
+#include <forms/edge.hpp>
 #include <forms/sceneWidget.hpp>
 
 #include <QGraphicsScene>
