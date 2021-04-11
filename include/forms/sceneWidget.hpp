@@ -11,7 +11,7 @@ namespace sackofcheese {
     class QTNODEEDITORFORMS_EXPORT SceneWidget : public QGraphicsView {
         Q_OBJECT;
 
-        void addNewItem(QPointF pt);
+        void addNewNode(QPointF pt);
         int timerId = 0;
 
     public:

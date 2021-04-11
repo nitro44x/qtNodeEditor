@@ -15,6 +15,7 @@ namespace {
 }
 
 namespace sackofcheese {
+
     Node::Node(SceneWidget* graphWidget)
         : graph(graphWidget) {
         setFlag(ItemIsMovable);
@@ -47,31 +48,37 @@ namespace sackofcheese {
     }
 
     void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*) {
-        painter->setPen(QPen(Qt::black, 0));
-        painter->setBrush(Qt::cyan);
+        if (option->state & QStyle::State_Sunken) {
+            painter->setPen(QPen(Qt::black, 4, Qt::DashLine));
+            painter->setBrush(Qt::magenta);
+        }
+        else {
+            painter->setPen(QPen(Qt::black, 1));
+            painter->setBrush(Qt::cyan);
+        }
+
         painter->drawEllipse(-kWidth/2.0, -kHeight/2.0, kWidth, kHeight);
     }
 
     QVariant Node::itemChange(GraphicsItemChange change, const QVariant& value) {
-        switch (change) {
-        case ItemPositionHasChanged:
+
+        if(ItemPositionHasChanged == change) {
             for (Edge* edge : qAsConst(edgeList))
                 edge->updateEndpoints();
             graph->itemMoved();
-            break;
-        default:
-            break;
-        };
+        }
 
         return QGraphicsItem::itemChange(change, value);
     }
 
     void Node::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+        // Update item state (sunken/raised)
         update();
         QGraphicsItem::mousePressEvent(event);
     }
 
     void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+        // Update item state (sunken/raised)
         update();
         QGraphicsItem::mouseReleaseEvent(event);
     }

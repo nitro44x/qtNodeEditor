@@ -84,28 +84,16 @@ namespace sackofcheese {
     void SceneWidget::mouseReleaseEvent(QMouseEvent* event) {
         switch (event->button()) {
         case Qt::RightButton:
-            addNewItem(mapToScene(event->pos()));
+            addNewNode(mapToScene(event->pos()));
             break;
         default:
             QGraphicsView::mouseReleaseEvent(event);
         }
     }
 
-    void SceneWidget::addNewItem(QPointF pt) {
+    void SceneWidget::addNewNode(QPointF pt) {
         Node* node = new Node(this);
-        const QList<QGraphicsItem*> items = scene()->items();
-        Edge* e = nullptr;
-        for (auto iter = items.rbegin(); iter != items.rend(); ++iter) {
-            if (auto * n = qgraphicsitem_cast<Node*>(*iter)) {
-                e = new Edge(node, n);
-                break;
-            }
-        }
         scene()->addItem(node);
-
-        if(e)
-            scene()->addItem(e);
-
         node->setPos(pt.x(), pt.y());
     }
 }
