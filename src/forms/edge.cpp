@@ -13,7 +13,7 @@ namespace sackofcheese {
         setAcceptedMouseButtons(Qt::NoButton);
         source->addEdge(this);
         dest->addEdge(this);
-        adjust();
+        updateEndpoints();
     }
 
     Node* Edge::sourceNode() const {
@@ -24,7 +24,7 @@ namespace sackofcheese {
         return dest;
     }
 
-    void Edge::adjust() {
+    void Edge::updateEndpoints() {
         if (!source || !dest)
             return;
 
@@ -33,14 +33,8 @@ namespace sackofcheese {
 
         prepareGeometryChange();
 
-        if (length > qreal(20.)) {
-            QPointF edgeOffset((line.dx() * 10) / length, (line.dy() * 10) / length);
-            sourcePoint = line.p1() + edgeOffset;
-            destPoint = line.p2() - edgeOffset;
-        }
-        else {
-            sourcePoint = destPoint = line.p1();
-        }
+        sourcePoint = line.p1();
+        destPoint = line.p2();
     }
 
     QRectF Edge::boundingRect() const {

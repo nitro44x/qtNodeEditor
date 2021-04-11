@@ -23,13 +23,11 @@ namespace sackofcheese {
         void addItem(QGraphicsItem* n);
 
     public slots:
-        void shuffle();
         void zoomIn();
         void zoomOut();
 
     protected:
         void keyPressEvent(QKeyEvent* event) override;
-        void timerEvent(QTimerEvent* event) override;
         void wheelEvent(QWheelEvent* event) override;
         void drawBackground(QPainter* painter, const QRectF& rect) override;
 

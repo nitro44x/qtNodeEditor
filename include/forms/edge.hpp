@@ -14,7 +14,7 @@ namespace sackofcheese {
         Node* sourceNode() const;
         Node* destNode() const;
 
-        void adjust();
+        void updateEndpoints();
 
         enum { Type = UserType + 2 };
         int type() const override { return Type; }
