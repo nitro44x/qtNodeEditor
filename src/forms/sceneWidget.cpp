@@ -11,7 +11,7 @@
 
 namespace sackofcheese {
 
-    SceneWidget::SceneWidget(QWidget* parent) : QGraphicsView(parent), centerNode(nullptr) {
+    SceneWidget::SceneWidget(QWidget* parent) : QGraphicsView(parent) {
         QGraphicsScene* scene = new QGraphicsScene(this);
         scene->setItemIndexMethod(QGraphicsScene::NoIndex);
         scene->setSceneRect(-200, -200, 400, 400);
@@ -35,10 +35,6 @@ namespace sackofcheese {
 
     void SceneWidget::addItem(QGraphicsItem* n) {
         scene()->addItem(n);
-    }
-
-    void SceneWidget::setCenterItem(Node* n) {
-        centerNode = n;
     }
 
     void SceneWidget::keyPressEvent(QKeyEvent* event) {
@@ -149,17 +145,28 @@ namespace sackofcheese {
     void SceneWidget::mouseReleaseEvent(QMouseEvent* event) {
         switch (event->button()) {
         case Qt::RightButton:
-            addItem(mapToScene(event->pos()));
+            addNewItem(mapToScene(event->pos()));
             break;
         default:
             QGraphicsView::mouseReleaseEvent(event);
         }
     }
 
-    void SceneWidget::addItem(QPointF pt) {
+    void SceneWidget::addNewItem(QPointF pt) {
         Node* node = new Node(this);
+        const QList<QGraphicsItem*> items = scene()->items();
+        Edge* e = nullptr;
+        for (auto iter = items.rbegin(); iter != items.rend(); ++iter) {
+            if (auto * n = qgraphicsitem_cast<Node*>(*iter)) {
+                e = new Edge(node, n);
+                break;
+            }
+        }
         scene()->addItem(node);
-        scene()->addItem(new Edge(node, centerNode));
+
+        if(e)
+            scene()->addItem(e);
+
         node->setPos(pt.x(), pt.y());
     }
 }

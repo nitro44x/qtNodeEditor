@@ -47,19 +47,15 @@ struct SampleSetup {
         node7->setPos(-50, 50);
         node8->setPos(0, 50);
         node9->setPos(50, 50);
-
-        scene->setCenterItem(node5);
     }
 
     static void singleNode(sackofcheese::SceneWidget* scene) {
         sackofcheese::Node* n = new sackofcheese::Node(scene);
         scene->addItem(n);
         n->setPos(0, 0);
-        scene->setCenterItem(n);
     }
 
-    static void empty(sackofcheese::SceneWidget* ) {
-    }
+    static void empty(sackofcheese::SceneWidget* ) { }
 };
 
 int main(int argc, char** argv) {

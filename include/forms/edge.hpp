@@ -24,7 +24,8 @@ namespace sackofcheese {
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
     private:
-        Node* source, * dest;
+        Node* source;
+        Node* dest;
 
         QPointF sourcePoint;
         QPointF destPoint;

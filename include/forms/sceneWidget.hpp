@@ -11,6 +11,9 @@ namespace sackofcheese {
     class QTNODEEDITORFORMS_EXPORT SceneWidget : public QGraphicsView {
         Q_OBJECT;
 
+        void addNewItem(QPointF pt);
+        int timerId = 0;
+
     public:
         SceneWidget(QWidget* parent = nullptr);
         ~SceneWidget();
@@ -18,7 +21,6 @@ namespace sackofcheese {
         void itemMoved();
 
         void addItem(QGraphicsItem* n);
-        void setCenterItem(Node* n);
 
     public slots:
         void shuffle();
@@ -35,12 +37,5 @@ namespace sackofcheese {
 
         void mousePressEvent(QMouseEvent* event) override;
         void mouseReleaseEvent(QMouseEvent* event) override;
-
-    private:
-        int timerId = 0;
-        Node* centerNode;
-
-        void addItem(QPointF pt);
     };
-
 }
