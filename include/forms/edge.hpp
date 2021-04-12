@@ -16,7 +16,7 @@ namespace sackofcheese {
 
         void updateEndpoints();
 
-        enum { Type = UserType + 2 };
+        enum { Type = UserType + 200 };
         int type() const override { return Type; }
 
     protected:

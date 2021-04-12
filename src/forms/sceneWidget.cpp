@@ -14,7 +14,6 @@ namespace sackofcheese {
     SceneWidget::SceneWidget(QWidget* parent) : QGraphicsView(parent) {
         QGraphicsScene* scene = new QGraphicsScene(this);
         scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-        //scene->setSceneRect(-200, -200, 400, 400);
         setScene(scene);
         setCacheMode(CacheBackground);
         setViewportUpdateMode(BoundingRectViewportUpdate);
@@ -24,7 +23,7 @@ namespace sackofcheese {
 
     SceneWidget::~SceneWidget() = default;
 
-    void SceneWidget::itemMoved() { }
+    void SceneWidget::itemMoved() {}
 
     void SceneWidget::addItem(QGraphicsItem* n) {
         scene()->addItem(n);
@@ -50,14 +49,8 @@ namespace sackofcheese {
 #endif
 
     void SceneWidget::drawBackground(QPainter* painter, const QRectF& rect) {
-        Q_UNUSED(rect);
-
         QRectF sceneRect = this->sceneRect();
-        QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
-        gradient.setColorAt(0, Qt::white);
-        gradient.setColorAt(1, Qt::lightGray);
-        painter->fillRect(rect.intersected(sceneRect), gradient);
-        painter->setBrush(Qt::NoBrush);
+        painter->setPen(Qt::lightGray);
         painter->drawRect(sceneRect);
     }
 
@@ -78,6 +71,8 @@ namespace sackofcheese {
     }
 
     void SceneWidget::mousePressEvent(QMouseEvent* event) {
+        auto i = scene()->selectedItems();
+        auto v = std::vector<QGraphicsItem*>(i.begin(), i.end());
         QGraphicsView::mousePressEvent(event);
     }
 
@@ -89,6 +84,12 @@ namespace sackofcheese {
         default:
             QGraphicsView::mouseReleaseEvent(event);
         }
+    }
+
+    void SceneWidget::resizeEvent(QResizeEvent* event) {
+        auto const height = event->size().height();
+        auto const width = event->size().width();
+        scene()->setSceneRect(-width / 2.0, -height / 2.0, width, height);
     }
 
     void SceneWidget::addNewNode(QPointF pt) {
