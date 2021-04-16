@@ -1,24 +1,15 @@
 #pragma once
 
-#include <forms/exports.hpp>
-
 #include <QGraphicsItem>
-#include <QVector>
 
 namespace sackofcheese {
 
-    class Edge;
-    class SceneWidget;
-
-    class QTNODEEDITORFORMS_EXPORT Node : public QGraphicsItem {
+    class NodeConnectionZone : public QGraphicsItem {
 
     public:
-        Node(SceneWidget* graphWidget);
+        NodeConnectionZone(QGraphicsItem* parent = nullptr);
 
-        void addEdge(Edge* edge);
-        QVector<Edge*> edges() const;
-
-        enum { Type = UserType + 100 };
+        enum { Type = UserType + 102 };
         int type() const override { return Type; }
 
         QRectF boundingRect() const override;
@@ -33,13 +24,6 @@ namespace sackofcheese {
 
         void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
         void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
-
-
-    private:
-        QVector<Edge*> edgeList;
-        QPointF newPos;
-        SceneWidget* graph;
-        double vTol = 100;
     };
 
 }

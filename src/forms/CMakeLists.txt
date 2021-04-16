@@ -6,6 +6,8 @@ set(srcs
     sceneWidget.cpp
     edge.cpp
     node.cpp
+    nodeConnection.hpp
+    nodeConnection.cpp
 )
 
 set(includes
