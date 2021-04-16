@@ -10,29 +10,6 @@ namespace sackofcheese {
     class Edge;
     class SceneWidget;
 
-    class InnerNode : public QGraphicsItem {
-
-    public:
-        InnerNode(QGraphicsItem* parent = nullptr);
-
-        enum { Type = UserType + 101 };
-        int type() const override { return Type; }
-
-        QRectF boundingRect() const override;
-        QPainterPath shape() const override;
-        void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-
-    protected:
-        QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-
-        void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-
-        void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
-
-    };
-
     class NodeConnectionZone : public QGraphicsItem {
 
     public:
