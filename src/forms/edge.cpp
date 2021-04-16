@@ -28,8 +28,18 @@ namespace sackofcheese {
         if (!source || !dest)
             return;
 
+        auto const srcConnectionPts = source->connectionPoints();
+        auto const destConnectionPts = dest->connectionPoints();
+
         QLineF line(mapFromItem(source, 0, 0), mapFromItem(dest, 0, 0));
-        qreal length = line.length();
+
+        for (auto const& srcPt : srcConnectionPts) {
+            for (auto const& dstPt : destConnectionPts) {
+                QLineF testLine(mapFromItem(source, srcPt), mapFromItem(dest, dstPt));
+                if (testLine.length() < line.length())
+                    line = testLine;
+            }
+        }
 
         prepareGeometryChange();
 

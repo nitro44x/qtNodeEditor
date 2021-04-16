@@ -4,10 +4,25 @@
 
 namespace sackofcheese {
 
-    class NodeConnectionZone : public QGraphicsItem {
+    class Node;
 
+    class ConnectionMaker final {
     public:
-        NodeConnectionZone(QGraphicsItem* parent = nullptr);
+        ~ConnectionMaker();
+
+        void startMakingConnection(Node* src);
+        void finishMakingConnection(Node* dest);
+        void reset();
+        bool active() const;
+
+    private:
+        Node* m_src = nullptr;
+        Node* m_dst = nullptr;
+    };
+
+    class NodeConnectionZone : public QGraphicsItem {
+    public:
+        NodeConnectionZone(ConnectionMaker * connector, QGraphicsItem* parent = nullptr);
 
         enum { Type = UserType + 102 };
         int type() const override { return Type; }
@@ -24,6 +39,9 @@ namespace sackofcheese {
 
         void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
         void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
+
+    private:
+        ConnectionMaker* mConnector = nullptr;
     };
 
 }

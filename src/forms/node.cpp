@@ -16,19 +16,23 @@ namespace {
     static const int kSelectionZonePadding = 25;
     static const int kSelectionZoneWidth = kWidth + kSelectionZonePadding;
     static const int kSelectionZoneHeight = kHeight + kSelectionZonePadding;
-    static const int kPadding = 3;
+    static const int kPadding = 0;
 }
 
 namespace sackofcheese {
-
     Node::Node(SceneWidget* graphWidget)
-        : graph(graphWidget) {
+        : Node(graphWidget, graphWidget->getConnector()) {
+    }
+
+    Node::Node(SceneWidget* graphWidget, ConnectionMaker * connector)
+        : graph(graphWidget), mConnector(connector) {
         setFlag(ItemIsMovable);
         setFlag(ItemSendsGeometryChanges);
+        setHandlesChildEvents(false);
         setCacheMode(DeviceCoordinateCache);
         setAcceptHoverEvents(true);
 
-        new NodeConnectionZone(this);
+        new NodeConnectionZone(mConnector, this);
     }
 
     void Node::addEdge(Edge* edge) {
@@ -72,6 +76,16 @@ namespace sackofcheese {
         painter->drawEllipse(-kWidth / 2.0, -kHeight / 2.0, kWidth, kHeight);
     }
 
+    QVector<QPointF> Node::connectionPoints() const {
+        QVector<QPointF> out{};
+        out.push_back(QPointF(0.0, 0.0));
+        out.push_back(QPointF(kWidth + kSelectionZonePadding * 0.5, 0));
+        out.push_back(-QPointF(kWidth + kSelectionZonePadding * 0.5, 0));
+        out.push_back(QPointF(0.0, kHeight + kSelectionZonePadding * 0.5));
+        out.push_back(-QPointF(0.0, kHeight + kSelectionZonePadding * 0.5));
+        return out;
+    }
+
     QVariant Node::itemChange(GraphicsItemChange change, const QVariant& value) {
 
         if (ItemPositionHasChanged == change) {
@@ -90,6 +104,9 @@ namespace sackofcheese {
     }
 
     void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+        if (mConnector->active())
+            mConnector->finishMakingConnection(this);
+
         // Update item state (sunken/raised)
         update();
         QGraphicsItem::mouseReleaseEvent(event);

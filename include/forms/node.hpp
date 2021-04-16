@@ -9,11 +9,13 @@ namespace sackofcheese {
 
     class Edge;
     class SceneWidget;
+    class ConnectionMaker;
 
     class QTNODEEDITORFORMS_EXPORT Node : public QGraphicsItem {
 
     public:
         Node(SceneWidget* graphWidget);
+        Node(SceneWidget* graphWidget, ConnectionMaker * connector);
 
         void addEdge(Edge* edge);
         QVector<Edge*> edges() const;
@@ -24,6 +26,8 @@ namespace sackofcheese {
         QRectF boundingRect() const override;
         QPainterPath shape() const override;
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+
+        QVector<QPointF> connectionPoints() const;
 
     protected:
         QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
@@ -39,7 +43,7 @@ namespace sackofcheese {
         QVector<Edge*> edgeList;
         QPointF newPos;
         SceneWidget* graph;
-        double vTol = 100;
+        ConnectionMaker* mConnector;
     };
 
 }

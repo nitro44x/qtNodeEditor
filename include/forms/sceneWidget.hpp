@@ -7,12 +7,14 @@
 
 namespace sackofcheese {
     class Node;
+    class ConnectionMaker;
 
     class QTNODEEDITORFORMS_EXPORT SceneWidget : public QGraphicsView {
         Q_OBJECT;
 
         void addNewNode(QPointF pt);
         int timerId = 0;
+        std::unique_ptr<ConnectionMaker> mConnector = nullptr;
 
     public:
         SceneWidget(QWidget* parent = nullptr);
@@ -21,6 +23,8 @@ namespace sackofcheese {
         void itemMoved();
 
         void addItem(QGraphicsItem* n);
+
+        ConnectionMaker* getConnector() const;
 
     public slots:
         void zoomIn();

@@ -3,6 +3,8 @@
 #include <forms/node.hpp>
 #include <forms/edge.hpp>
 
+#include "nodeConnection.hpp"
+
 #include <math.h>
 
 #include <QKeyEvent>
@@ -11,7 +13,7 @@
 
 namespace sackofcheese {
 
-    SceneWidget::SceneWidget(QWidget* parent) : QGraphicsView(parent) {
+    SceneWidget::SceneWidget(QWidget* parent) : QGraphicsView(parent), mConnector(std::make_unique<ConnectionMaker>()) {
         QGraphicsScene* scene = new QGraphicsScene(this);
         scene->setItemIndexMethod(QGraphicsScene::NoIndex);
         setScene(scene);
@@ -27,6 +29,10 @@ namespace sackofcheese {
 
     void SceneWidget::addItem(QGraphicsItem* n) {
         scene()->addItem(n);
+    }
+
+    ConnectionMaker* SceneWidget::getConnector() const {
+        return mConnector.get();
     }
 
     void SceneWidget::keyPressEvent(QKeyEvent* event) {
@@ -71,8 +77,6 @@ namespace sackofcheese {
     }
 
     void SceneWidget::mousePressEvent(QMouseEvent* event) {
-        auto i = scene()->selectedItems();
-        auto v = std::vector<QGraphicsItem*>(i.begin(), i.end());
         QGraphicsView::mousePressEvent(event);
     }
 

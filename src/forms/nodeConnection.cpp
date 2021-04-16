@@ -1,12 +1,15 @@
 #include "nodeConnection.hpp"
 
 #include <forms/edge.hpp>
+#include <forms/node.hpp>
 #include <forms/sceneWidget.hpp>
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QStyleOption>
+#include <QGraphicsSceneDragDropEvent>
+#include <QMimeData>
 
 namespace {
     static const int kWidth = 100; //todo refactor these constants to a common place (with node.cpp)
@@ -14,12 +17,29 @@ namespace {
     static const int kSelectionZonePadding = 25;
     static const int kSelectionZoneWidth = kWidth + kSelectionZonePadding;
     static const int kSelectionZoneHeight = kHeight + kSelectionZonePadding;
-    static const int kPadding = 3;
+    static const int kPadding = 0;
 }
 
 namespace sackofcheese {
+    ConnectionMaker::~ConnectionMaker() = default;
 
-    NodeConnectionZone::NodeConnectionZone(QGraphicsItem* parent) {
+    void ConnectionMaker::startMakingConnection(Node* src) {
+        m_src = src;
+    }
+
+    void ConnectionMaker::finishMakingConnection(Node* dest) {
+        m_dst = dest;
+    }
+
+    void ConnectionMaker::reset() {
+        m_src = m_dst = nullptr;
+    }
+
+    bool ConnectionMaker::active() const {
+        return m_src;
+    }
+
+    NodeConnectionZone::NodeConnectionZone(ConnectionMaker * connector, QGraphicsItem* parent) : mConnector(connector) {
         setFlag(ItemSendsGeometryChanges);
         setFlag(ItemStacksBehindParent);
         setCacheMode(DeviceCoordinateCache);
@@ -62,6 +82,9 @@ namespace sackofcheese {
     }
 
     void NodeConnectionZone::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+        if(auto p = qgraphicsitem_cast<Node*>(parentItem()))
+            mConnector->startMakingConnection(p);
+
         // Update item state (sunken/raised)
         update();
         QGraphicsItem::mousePressEvent(event);
@@ -82,4 +105,5 @@ namespace sackofcheese {
         update();
         QGraphicsItem::hoverLeaveEvent(event);
     }
+
 }
